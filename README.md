@@ -10,6 +10,4 @@ The program calculates and displays all 92 possible combinations of the queens.
 
 Algorithm scheme:
 --------------------
-The program calculates and displays all 92 possible combinations of the queens.
-
 ![Algorithm scheme](https://github.com/N1ghtF1re/Eight-queens-puzzle/blob/master/docs/scheme.png)
