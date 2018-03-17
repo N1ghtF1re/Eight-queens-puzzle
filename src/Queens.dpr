@@ -1,0 +1,98 @@
+program Queens;
+
+{$APPTYPE CONSOLE}
+
+uses
+  SysUtils;
+
+const
+  N=8;
+
+type
+  TCol = array [1..N] of boolean;
+  TMainDiag = array [2..N*2] of boolean;
+  TSecDiag = array[1-N..N-1] of boolean;
+  TQueensArr = array[1..N] of Integer;
+
+var
+  Col: TCol; // Массив столбцов
+  MD:TMainDiag; // Массив "Главных" диагоналей
+  SD: TSecDiag; // Массив "Побочных" диагоналей
+  Queen: TQueensArr;   // Массив координат ферзя
+  Num:Byte;
+
+// Процедура выводит на шахматное поле с расставлеными ферзями на экран
+procedure print(QA: TQueensArr);
+var
+   i,j:integer;
+begin
+  Writeln('Number ', Num);
+  for i:=1 to N do
+  begin
+    for j := 1 to N do
+    begin
+      if (Queen[i] = j) then
+        write('Q')
+      else
+        write('.');
+    end;
+    writeln;
+  end;
+  writeln;
+  Inc(num);
+end;
+
+// Процедура ставит ферзя по координатам [i,j] и ставит false в зоне поражения ферзя
+procedure setQueen(i,j:integer);
+begin
+  Queen[i] := j;
+  Col[j]:=false;
+  MD[i+j]:=false;
+  SD[i-j]:=false;
+end;
+
+// Процедура удаляет ферзя по координатам [i,j]
+procedure RemoveQueen(i,j:integer);
+begin
+  Col[j]:=true;
+  MD[i+j]:=true;
+  SD[i-j]:=true;
+end;
+
+// Рекурсивная роцедура "пробует" ставить ферзя в свободное от зоны поражения место
+procedure tryQueen(i:integer);
+var
+    j:integer;
+begin
+  for j:=1 to N do  // i - строка, j - столбец
+    if Col[j] and MD[i+j] and SD[i-j] then
+      begin
+        setQueen(i,j);
+        if i<N then
+          tryQueen(i+1)  // Если еще не достигли 8-ой строки, то вызываем рекурсивно
+        else
+          print(Queen);
+        RemoveQueen(i,j);
+      end;
+end;
+
+// Процедура обнуляет массивы
+procedure cleanArrays;
+var
+  i:integer;
+begin
+  for i:=1 to N do
+    Col[i]:=true;
+  for i:=2 to N*2 do
+    MD[i]:=true;
+  for i:= (1-N) to (N-1) do
+    SD[i]:=true;
+end;
+
+begin
+  Num := 1;
+  cleanArrays;
+  tryQueen(1);
+  Readln;
+end.
+
